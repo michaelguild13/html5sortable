@@ -9,6 +9,7 @@ import _debounce from './debounce'
 import _index from './index'
 import isInDom from './isInDom'
 import {insertBefore as _before, insertAfter as _after} from './insertHtmlElements'
+import _serialize from './serialize'
 /*
  * variables global to the plugin
  */
@@ -29,7 +30,7 @@ var _removeItemEvents = function (items) {
   _off(items, 'mouseenter')
   _off(items, 'mouseleave')
 }
-/*
+/**
  * Remove event handlers from sortable
  * @param {Element} sortable a single sortable
  */
@@ -38,7 +39,8 @@ var _removeSortableEvents = function (sortable) {
   _off(sortable, 'dragenter')
   _off(sortable, 'drop')
 }
-/*
+
+/**
  * Attach ghost to dataTransfer object
  * @param {Event} original event
  * @param {object} ghost-object with item, x and y coordinates
@@ -342,11 +344,6 @@ var _makeEvent = function (name, detail) {
   return e
 }
 
-var _serialize = function (list) {
-  var children = _filter(list.children, _data(list, 'items'))
-  return children
-}
-
 /*
  * Public sortable object
  * @param {Array|NodeList} sortableElements
@@ -404,6 +401,8 @@ export default function sortable (sortableElements, options) {
     // get options & set options on sortable
     options = _data(sortableElement, 'opts') || options
     _data(sortableElement, 'opts', options)
+    // property to define as sortable
+    sortableElement.isSortable = true
     // reset sortable
     _reloadSortable(sortableElement)
     // initialize
@@ -622,7 +621,6 @@ sortable.enable = function (sortableElement) {
 sortable.disable = function (sortableElement) {
   _disableSortable(sortableElement)
 }
-
 /* START.TESTS_ONLY */
 sortable.__testing = {
   // add internal methods here for testing purposes
